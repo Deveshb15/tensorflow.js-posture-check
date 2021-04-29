@@ -13,6 +13,13 @@ function setup() {
 
     videofeed = createCapture(VIDEO);
     videofeed.size(width, height);
-    
+
+    posenet = ml5.poseNET(videofeed);
+    posenet.on('pose', function (results) {
+        poses = results;
+    });
+
+    videofeed.hide();
+    noLoop();
 }
 
