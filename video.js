@@ -36,7 +36,7 @@ function draw() {
 
 // toggle button for starting the video feed
 function start() {
-    select("#startstop").html("stop");
+    select("#startstop").html("Stop");
     document.getElementById("startstop").addEventListener("click", stop);
     started = true;
     loop();
@@ -44,7 +44,7 @@ function start() {
 
 // toggle button for ending the video feed
 function stop() {
-    select("#startstop").html('start')
+    select("#startstop").html('Start')
     document.getElementById('startstop').addEventListener('click', start)
     removeBlur();
     started = false;
