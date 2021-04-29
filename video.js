@@ -19,6 +19,7 @@ function setup() {
         poses = results;
     });
 
+    console.log(poses);
     videofeed.hide();
     noLoop();
 }
@@ -46,4 +47,39 @@ function stop() {
     select("#startstop").html('start')
     document.getElementById('startstop').addEventListener('click', start)
     noLoop();
+}
+
+// parameter for posenet to track the eyes
+let rightEye,
+    leftEye,
+    defaultRightEyePosition = [],
+    defaultLeftEyePosition = []
+
+// calculate position of various keypoints
+function calEyes() {
+    for(let i = 0; i < poses.length; i++){
+        let pose = poses[i].pose;
+        for(let j = 0; j < pose.keypoints.length; j++){
+            let keypoint = pose.keypoints[j];
+            rightEye = pose.keypoints[j].position;
+            leftEye = pose.keypoints[j].position;
+
+            // keypoints are the points representing the different joints on the body recognized by posenet
+            while(defaultRightEyePosition < 1) {
+                defaultRightEyePosition.push(rightEye.y)
+            }
+
+            while(defaultLeftEyePosition < 1) {
+                defaultLeftEyePosition.push(leftEye.y)
+            }
+
+            // if the current position of the body is too far from the original position blur function is called
+            if(Math.abs(rightEye.y - defaultRightEyePosition[0]) > 20){
+                blur();
+            }
+            if(Math.abs(rightEye.y - defaultRightEyePosition[0]) < 20){
+                removeBlur();
+            }
+        }
+    }
 }
