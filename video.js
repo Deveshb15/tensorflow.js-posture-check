@@ -32,3 +32,18 @@ function draw() {
 }
 
 
+// toggle for start and stop
+function start() {
+    select("#startstop").html('stop')
+    document.getElementById('startstop').addEventListener('click', stop)
+    started = true;
+    loop();
+}
+
+// toggle for start and stop
+function stop() {
+    started = false;
+    select("#startstop").html('start')
+    document.getElementById('startstop').addEventListener('click', start)
+    noLoop();
+}
