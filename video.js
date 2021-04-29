@@ -1,51 +1,53 @@
 let videofeed;
 let posenet;
-let started = false;
 let poses = [];
+let started = false;
 const audio = document.getElementById('audioElement');
 
 
-// p5.js setup
+// p5.js setup() function to set up the canvas for the web cam video stream
 function setup() {
-
-    let canvas = createCanvas(500,500);
-    canvas.parent('video');
+    //creating a canvas by giving the dimensions
+    const canvas = createCanvas(500, 500);
+    canvas.parent("video");
 
     videofeed = createCapture(VIDEO);
     videofeed.size(width, height);
 
-    posenet = ml5.poseNET(videofeed);
-    posenet.on('pose', function (results) {
+    // setting up the poseNet model to feed in the video feed.
+    posenet = ml5.poseNet(videofeed);
+
+    posenet.on("pose", function (results) {
         poses = results;
     });
 
-    console.log(poses);
     videofeed.hide();
     noLoop();
 }
 
-// p5.js draw function
+// p5.js draw function() is called after the setup function
 function draw() {
-    if(started){
+    if (started) {
         image(videofeed, 0, 0, width, height);
-        calcEyes();
+        calEyes();
     }
 }
 
 
-// toggle for start and stop
+// toggle button for starting the video feed
 function start() {
-    select("#startstop").html('stop')
-    document.getElementById('startstop').addEventListener('click', stop)
+    select("#startstop").html("stop");
+    document.getElementById("startstop").addEventListener("click", stop);
     started = true;
     loop();
 }
 
-// toggle for start and stop
+// toggle button for ending the video feed
 function stop() {
-    started = false;
     select("#startstop").html('start')
     document.getElementById('startstop').addEventListener('click', start)
+    removeBlur();
+    started = false;
     noLoop();
 }
 
@@ -53,16 +55,16 @@ function stop() {
 let rightEye,
     leftEye,
     defaultRightEyePosition = [],
-    defaultLeftEyePosition = []
+    defaultLeftEyePosition = [];
 
 // calculate position of various keypoints
-function calcEyes() {
+function calEyes() {
     for(let i = 0; i < poses.length; i++){
         let pose = poses[i].pose;
         for(let j = 0; j < pose.keypoints.length; j++){
             let keypoint = pose.keypoints[j];
-            rightEye = pose.keypoints[j].position;
-            leftEye = pose.keypoints[j].position;
+            rightEye = pose.keypoints[2].position;
+            leftEye = pose.keypoints[1].position;
 
             // keypoints are the points representing the different joints on the body recognized by posenet
             while(defaultRightEyePosition < 1) {
@@ -83,3 +85,19 @@ function calcEyes() {
         }
     }
 }
+
+// Function to blur and play audio 
+function blur() {
+    document.body.style.filter = "blur(5px)";
+    document.body.style.transition = "1s";
+    let audio = document.getElementById("audioElement");
+    audio.play();
+}
+
+// Function to remove blur and pause audio 
+function removeBlur() {
+    document.body.style.filter = "blur(0px)";
+    let audio = document.getElementById("audioElement");
+    audio.pause();
+}
+
