@@ -28,7 +28,7 @@ function setup() {
 function draw() {
     if(started){
         image(videofeed, 0, 0, width, height);
-        calEyes();
+        calcEyes();
     }
 }
 
@@ -56,7 +56,7 @@ let rightEye,
     defaultLeftEyePosition = []
 
 // calculate position of various keypoints
-function calEyes() {
+function calcEyes() {
     for(let i = 0; i < poses.length; i++){
         let pose = poses[i].pose;
         for(let j = 0; j < pose.keypoints.length; j++){
