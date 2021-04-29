@@ -23,3 +23,12 @@ function setup() {
     noLoop();
 }
 
+// p5.js draw function
+function draw() {
+    if(started){
+        image(videofeed, 0, 0, width, height);
+        calEyes();
+    }
+}
+
+
